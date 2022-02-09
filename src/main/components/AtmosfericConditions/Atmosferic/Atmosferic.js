@@ -1,48 +1,70 @@
 import React, { useState } from "react";
 import Styles from './Styles.module.scss';
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@material-ui/core";
 const Atmosferic = props => {
-  const { results, changePage, onClickDetail } = props;
+  const { results, changePage, onClickDetail, page, pageSize, totalRows } = props;
+  // const [page, setPage] = useState(0);
+  const columns = [
+    { field: '_id', headerName: 'ID' },
+    { field: 'cityid', headerName: 'City ID' },
+    { field: 'name', headerName: 'Name' },
+    { field: 'state', headerName: 'State' },
+    { field: 'probabilityofprecip', headerName: 'Probability of precip' },
+    { field: 'relativehumidity', headerName: 'Relative humidity' },
+    { field: 'lastreporttime', headerName: 'id' },
+    { field: 'rain', headerName: 'Rain' },
+  ];
 
-  const onChangePage = (event) => {
-    changePage(event);
+  const onChangePage = (event, page) => {
+    console.log(page);
+    //setPage(page);
+    changePage(page);
   }
   return (
-    <div className={Styles.container}>
-      <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>City Id</th>
-            <th>Name</th>
-            <th>state</th>
-            <th>Probability of precip</th>
-            <th>Relative humidity</th>
-            <th>Last Report Time</th>
-            <th>Rain</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            results.map((element, index) => {
-              return (<tr>
-                <td  onClick={()=>onClickDetail(element)}>{element._id}</td>
-                <td >{element.cityid}</td>
-                <td >{element.name}</td>
-                <td >{element.state}</td>
-                <td >{element.probabilityofprecip}</td>
-                <td >{element.relativehumidity}</td>
-                <td >{element.lastreporttime}</td>
-                <td >{element.probabilityofprecip > 60 || element.relativehumidity > 50 ? 'Si' : 'No'} </td>
-              </tr>
-              )
-
-            })
-          }
-        </tbody>
-      </table>
-      <button onClick={() => onChangePage('back')}>back page</button>
-      <button onClick={() => onChangePage('next')}>next page</button>
-    </div>
+    <Grid item xs={12}>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {
+                columns.map(colum => {
+                  return (
+                    <TableCell>{colum.headerName}</TableCell>
+                  )
+                })
+              }
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              results.map(result => {
+                return (
+                  <TableRow key={result._id}>
+                    <TableCell onClick={() => onClickDetail(result)}>{result._id}</TableCell>
+                    <TableCell >{result.cityid}</TableCell>
+                    <TableCell >{result.name}</TableCell>
+                    <TableCell >{result.state}</TableCell>
+                    <TableCell >{result.probabilityofprecip}</TableCell>
+                    <TableCell >{result.relativehumidity}</TableCell>
+                    <TableCell >{result.lastreporttime}</TableCell>
+                    <TableCell >{result.probabilityofprecip > 60 || result.relativehumidity > 50 ? 'Si' : 'No'} </TableCell>
+                  </TableRow>
+                )
+              })
+            }
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        count={totalRows}
+        rowsPerPage={pageSize}
+        rowsPerPageOptions={[5, 10, 20, 50]}
+        page={page} 
+        onPageChange={onChangePage}/>
+      {/* <button onClick={() => onChangePage('back')}>back page</button>
+      <button onClick={() => onChangePage('next')}>next page</button> */}
+    </Grid>
   );
 
 }

@@ -2,7 +2,7 @@ import React from "react";
 
 const AtmosfericDetail = props => {
     const { details } = props;
-    console.log('...',details);
+    // console.log('...',details);
     return (
         <div>
             <div><b>Detalles atmosfericos</b></div>
